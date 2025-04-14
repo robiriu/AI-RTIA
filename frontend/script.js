@@ -1,49 +1,38 @@
-function startCamera() {
-    const video = document.getElementById('webcam');
-    const snapBtn = document.getElementById('snapBtn');
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-            video.style.display = 'block';
-            snapBtn.style.display = 'inline-block';
-        });
-}
+const imageUpload = document.getElementById("image-upload");
+const resultImgUpload = document.getElementById("result-img-upload");
+const countUpload = document.getElementById("count-upload");
 
-function captureImage() {
-    const video = document.getElementById('webcam');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0);
-    canvas.toBlob((blob) => {
-        const formData = new FormData();
-        formData.append('file', blob, 'webcam.jpg');
+imageUpload.addEventListener("change", () => {
+    const file = imageUpload.files[0];
+    if (!file) return;
 
-        fetch('http://127.0.0.1:8000/detect/', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result-img-webcam').src = "data:image/jpeg;base64," + data.image;
-                document.getElementById('count-webcam').innerText = `Palm trees detected: ${data.count}`;
-            });
-    }, 'image/jpeg');
-}
-
-function uploadImage(event) {
-    const file = event.target.files[0];
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
-    fetch('http://127.0.0.1:8000/detect/', {
-        method: 'POST',
-        body: formData
+    fetch("http://localhost:8000/detect/", {
+        method: "POST",
+        body: formData,
     })
         .then(response => response.json())
         .then(data => {
-            document.getElementById('result-img-upload').src = "data:image/jpeg;base64," + data.image;
-            document.getElementById('count-upload').innerText = `Palm trees detected: ${data.count}`;
+            if (data.error) {
+                console.error("Error from server:", data.error);
+                countUpload.innerText = "Error during detection.";
+                return;
+            }
+
+            const count = data.count ?? 0;
+            countUpload.innerText = `Palm trees detected: ${count}`;
+
+            if (data.image) {
+                resultImgUpload.src = `data:image/jpeg;base64,${data.image}`;
+            } else {
+                resultImgUpload.alt = "No image received";
+                console.warn("No image field in response.");
+            }
+        })
+        .catch(err => {
+            console.error("Error sending image:", err);
+            countUpload.innerText = "Error connecting to backend.";
         });
-}
+});

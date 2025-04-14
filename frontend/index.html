@@ -2,39 +2,18 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Palm Tree Counter</title>
+    <meta charset="UTF-8">
+    <title>Palm Tree Detection</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h2>🌴 Palm Tree Counter</h2>
+    <h1>Palm Tree Detection</h1>
 
-    <div class="options-container">
-        <!-- Option 1: Webcam -->
-        <section class="option">
-            <h3>Option 1: Use Webcam</h3>
-            <button onclick="startCamera()">Start Camera</button><br><br>
-            <video id="webcam" autoplay playsinline style="display:none;"></video><br>
-            <button id="snapBtn" style="display:none;" onclick="captureImage()">Capture</button>
+    <input type="file" id="image-upload" accept="image/*">
+    <div id="count-upload">Palm trees detected: -</div>
+    <img id="result-img-upload" src="" alt="Detected Image">
 
-            <h4>Detection Result (Webcam)</h4>
-            <img id="result-img-webcam" src="" alt="Webcam Detection Result" />
-            <p id="count-webcam">Palm trees detected: 0</p>
-        </section>
-
-        <!-- Option 2: Upload Image -->
-        <section class="option">
-            <h3>Option 2: Upload Image</h3>
-            <input type="file" accept="image/*" onchange="uploadImage(event)"><br>
-
-            <h4>Detection Result (Upload)</h4>
-            <img id="result-img-upload" src="" alt="Upload Detection Result" />
-            <p id="count-upload">Palm trees detected: 0</p>
-        </section>
-    </div>
-
-    <canvas id="canvas" style="display:none;"></canvas>
     <script src="script.js"></script>
 </body>
 
