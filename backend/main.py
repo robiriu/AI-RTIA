@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 # Roboflow API Client
-api_key = "TEHGbI0CKnrNwwzAMJPl"  # your API key
+api_key = "your API"  # I will give you my API key in other submission document
 model_id = "palm-tree-detection-yr8yg/4"     # your Roboflow model
 
 CLIENT = InferenceHTTPClient(
